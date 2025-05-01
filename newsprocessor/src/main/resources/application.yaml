@@ -6,5 +6,11 @@ spring:
       host: localhost
       port: 27017
       database: NewsAppDB
+      auto-index-creation: true
+
+
+news-api:
+  api:
+    key: d93b0adf8edd4857bdb03a58d26b335a
 
 

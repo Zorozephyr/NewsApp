@@ -5,6 +5,7 @@ import com.project.newsprocessor.dto.NewsApiArticleDto;
 import com.project.newsprocessor.entity.NewsArticle;
 import com.project.newsprocessor.newsclients.NewsSourceClient;
 import com.project.newsprocessor.repository.NewsProcessingRepository;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -36,8 +37,18 @@ public class NewsProcessingService {
             List<NewsArticle> articles = client.fetchArticles();
 
             for (NewsArticle article : articles) {
-                newsProcessingRepository.save(article);
+                String contentHash = DigestUtils.sha256Hex(article.getContent());
+                article.setContentHash(contentHash);
+                boolean exists = newsProcessingRepository.existsByUrl(article.getUrl()) ||
+                        newsProcessingRepository.existsByContentHash(contentHash);
+
+                if (!exists) {
+                    newsProcessingRepository.save(article);
+                } else {
+                    System.out.println("Duplicate article, not saving.");
+                }
             }
         }
     }
+
 }

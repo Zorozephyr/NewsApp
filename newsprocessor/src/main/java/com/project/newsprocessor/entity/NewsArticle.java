@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 
 import java.time.LocalDateTime;
 
@@ -23,8 +25,12 @@ public class NewsArticle {
     private String author;
     private String description;
     private String content;
+
+    @Indexed(unique = true)
     private String url;
     private String urlToImage;
     private LocalDateTime publishedAt;
     private LocalDateTime createdAt;
+    @Indexed(unique = true)
+    private String contentHash;
 }
