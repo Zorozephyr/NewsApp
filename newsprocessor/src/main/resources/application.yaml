@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: newsprocessor
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: NewsAppDB
+
+
