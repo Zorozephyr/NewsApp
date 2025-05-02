@@ -23,10 +23,22 @@ public class NewsApiClient implements NewsSourceClient {
 
     @Value("${news-api.api.key}")
     private String API_KEY;
-    private final String API_URL = "https://newsapi.org/v2/top-headlines?country=us&apiKey="+this.API_KEY+"&pageSize=10&page=2";
+
+    @Value("${news-api.api.url}")
+    private String BASE_URL;
+
+    @Value("${news-api.api.query-params}")
+    private String QUERY_PARAMS;
+
     @Override
     public List<NewsArticle> fetchArticles() {
-        NewsApiResponseDto response = restTemplate.getForObject(API_URL, NewsApiResponseDto.class);
+        if (API_KEY == null || API_KEY.isEmpty()) {
+            throw new IllegalStateException("API_KEY must not be empty");
+        }
+
+        String apiUrl = BASE_URL + API_KEY + QUERY_PARAMS ;
+
+        NewsApiResponseDto response = restTemplate.getForObject(apiUrl, NewsApiResponseDto.class);
         return response.getArticles().stream()
                 .map(mapper::map)
                 .collect(Collectors.toList());

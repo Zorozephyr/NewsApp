@@ -11,6 +11,8 @@ spring:
 
 news-api:
   api:
-    key: d93b0adf8edd4857bdb03a58d26b335a
+    key: "d93b0adf8edd4857bdb03a58d26b335a"
+    url: "https://newsapi.org/v2/top-headlines?country=us&apiKey="
+    query-params: "&pageSize=10&page=2"
 
 
