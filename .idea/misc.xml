@@ -4,6 +4,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/newsprocessor/pom.xml" />
+        <option value="$PROJECT_DIR$/ai-summarization-service/pom.xml" />
       </list>
     </option>
   </component>

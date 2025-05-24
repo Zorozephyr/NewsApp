@@ -1,17 +1,15 @@
-package com.project.newsprocessor;
+package com.project.ai_summarization_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.annotation.EnableKafka;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableScheduling
 @EnableKafka
-public class NewsprocessorApplication {
+public class AiSummarizationServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(NewsprocessorApplication.class, args);
+		SpringApplication.run(AiSummarizationServiceApplication.class, args);
 	}
 
 }

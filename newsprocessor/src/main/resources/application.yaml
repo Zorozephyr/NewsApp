@@ -8,11 +8,28 @@ spring:
       database: NewsAppDB
       auto-index-creation: true
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: 1
+      retries: 3
+      batch-size: 16384
+      buffer-memory: 33554432
+server:
+  port: 8100
 
 news-api:
   api:
     key: "d93b0adf8edd4857bdb03a58d26b335a"
     url: "https://newsapi.org/v2/top-headlines?country=us&apiKey="
-    query-params: "&pageSize=10&page=2"
+    query-params: "&pageSize=10&page=3"
+
+
+logging:
+  level:
+    org.apache.kafka: DEBUG
+    org.springframework.kafka: DEBUG
 
 

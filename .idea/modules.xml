@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/NewsApp.iml" filepath="$PROJECT_DIR$/.idea/NewsApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ai-summarization-service/ai-summarization-service.iml" filepath="$PROJECT_DIR$/ai-summarization-service/ai-summarization-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/newsprocessor/newsprocessor.iml" filepath="$PROJECT_DIR$/newsprocessor/newsprocessor.iml" />
     </modules>
   </component>

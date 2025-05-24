@@ -8,14 +8,17 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="newsprocessor" />
+        <module name="ai-summarization-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="ai-summarization-service" target="19" />
       <module name="newsprocessor" target="19" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ai-summarization-service" options="-parameters" />
       <module name="newsprocessor" options="-parameters" />
     </option>
   </component>
