@@ -1,9 +1,11 @@
 package com.project.ai_summarization_service.service.gpt;
 
+import java.util.List;
+
 public interface GPTProcessor {
 
-    String[] generateTags(String newsContent);
-    String summarize(String newsContent);
+    List<String> generateTags(String newsContent, String newsUrl);
+    String summarize(String newsContent, String newsUrl);
 
     String enrichedContent(String newsContent, String newsUrl);
 }

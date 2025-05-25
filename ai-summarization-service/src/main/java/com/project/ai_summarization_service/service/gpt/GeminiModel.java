@@ -1,7 +1,18 @@
 package com.project.ai_summarization_service.service.gpt;
 
+import com.google.genai.Client;
+import com.google.genai.types.GenerateContentResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Slf4j
+@Component
 public class GeminiModel implements GptModel{
 
     @Value("${gemini.api.key}")
@@ -13,31 +24,85 @@ public class GeminiModel implements GptModel{
     private final Client geminiClient;
 
     public GeminiModel(){
-        this.geminiClient = new Client();
-    }
-
-    private String callGeminiApi(String prompt, int maxTokens){
-
-    }
-    @Override
-    public String[] extractTags(String newsContent) {
-        String prompt = String.format()
+        this.geminiClient = Client.builder().apiKey(geminiApiKey).build();
     }
 
     @Override
-    public String createSummary(String newsContent) {
-        return null;
+    public List<String> extractTags(String newsContent, String newsUrl) {
+        String prompt = String.format(
+                "Analyze the following news content and extract relevant tags. Return only a comma-separated list of tags covering these categories: sentiment (positive/negative/neutral), news category (politics/business/technology/sports/entertainment/health/science/world/crime/education/environment), key entities (people/organizations/locations), countries mentioned, main keywords, and topic themes. Provide 10-15 most relevant tags total.\n\n"+
+                        "News Content: %s\n"+
+                        "Source URL: %s\n\n"+
+                        "Tags:",
+                newsContent, newsUrl
+        );
+        try{
+            GenerateContentResponse response = geminiClient.models.generateContent(
+                    geminiApiModel,
+                    prompt,
+                    null
+            );
+            String result = response.text().trim();
+
+            // Split by comma and clean up the tags
+            List<String> tags = Arrays.stream(result.split(","))
+                    .map(String::trim)
+                    .filter(tag -> !tag.isEmpty())
+                    .collect(Collectors.toList());
+
+            return tags;
+        }
+        catch (Exception e){
+            log.error("Error extracting news tags: {}", e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public String createSummary(String newsContent, String newsUrl) {
+        String prompt = String.format(
+                "Create a concise 2-3 sentence summary of the following news content. Focus on the most important facts: who, what, when, where, and why. Present only the summary without any introductory text or explanations.\n\n"+
+                        "News Content: %s\n"+
+                        "Source URL: %s\n\n"+
+                        "Summary:",
+                newsContent, newsUrl
+        );
+        try{
+            GenerateContentResponse response = geminiClient.models.generateContent(
+                    geminiApiModel,
+                    prompt,
+                    null
+            );
+            String result = response.text().trim();
+            return result;
+        }
+        catch (Exception e){
+            log.error("Error creating news summary: {}", e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public String enrichContent(String newsContent, String newsUrl) {
         String prompt = String.format(
-                "Create a descriptive content of almost 300 words based on the following news content. Search for the news in web and"+
-                        "find out more from every major news website using the news url I have given below and make sure that it is completely related to the following news content. Guarentee that "+
-                        "Include key details, context and insights while maintaining a neutral tone:\n"+
-                        "Content: %s\nURL: %s", newsContent, newsUrl
+                "Write a comprehensive 300-word article about the news topic below. Research the provided URL and related coverage from major news sources to gather complete information. Present only the final article content with key details, context, and insights in a neutral journalistic tone. Do not include research notes, source citations, or explanatory text about your process.\n\n"+
+                        "News Content: %s\n"+
+                        "Source URL: %s\n\n"+
+                        "Article:",
+                newsContent, newsUrl
         );
-        String response = callGeminiApi(prompt, 300);
-        return response;
+        try{
+            GenerateContentResponse response = geminiClient.models.generateContent(
+                    geminiApiModel,
+                    prompt,
+                    null
+            );
+            String result = response.text();
+            return result;
+        }
+        catch (Exception e){
+            log.error("Error generating enriched content");
+            return null;
+        }
     }
 }

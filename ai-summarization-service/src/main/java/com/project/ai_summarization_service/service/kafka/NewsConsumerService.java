@@ -1,8 +1,13 @@
 package com.project.ai_summarization_service.service.kafka;
 
 import com.project.ai_summarization_service.dto.NewsEvent;
+import com.project.ai_summarization_service.entity.Article;
+import com.project.ai_summarization_service.repository.ArticleRepository;
+import com.project.ai_summarization_service.service.ArticleProcessingService;
+import com.project.ai_summarization_service.service.gpt.GPTProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -12,6 +17,20 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class NewsConsumerService {
+
+    private ArticleProcessingService articleProcessingService;
+    private GPTProcessor gptProcessor;
+
+    private ArticleRepository articleRepository;
+
+    public NewsConsumerService(ArticleProcessingService articleProcessingService, GPTProcessor gptProcessor, ArticleRepository articleRepository) {
+        this.articleProcessingService = articleProcessingService;
+        this.gptProcessor = gptProcessor;
+        this.articleRepository = articleRepository;
+    }
+
+    @Autowired
+
 
     @KafkaListener(topics = "news.fetched", groupId = "news-group")
     public void consumerNewsEvent(ConsumerRecord<String, NewsEvent> record) {
@@ -56,8 +75,21 @@ public class NewsConsumerService {
     private void processNewsEvent(NewsEvent newsEvent) {
         log.info("🔄 Processing news event with ID: {}", newsEvent.getId());
 
-        // Add your business logic here
-        // Example: Save to database, trigger AI summarization, etc.
+        //Initial mapping
+        Article newArticle = Article.builder()
+                        .author(newsEvent.getAuthor())
+                        .originalContent(newsEvent.getContent())
+                        .originalDescription(newsEvent.getDescription())
+                        .originalNewsId(newsEvent.getId())
+                        .publishedAt(newsEvent.getPublishedAt())
+                        .sourceName(newsEvent.getSourceName())
+                        .sourceUrl(newsEvent.getUrl())
+                        .title(newsEvent.getTitle())
+                        .build();
+
+
+
+
 
         log.info("✅ Business logic processing completed for news ID: {}", newsEvent.getId());
     }
