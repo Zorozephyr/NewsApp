@@ -35,7 +35,7 @@ public class ArticleProcessingService {
             String combined = String.format("%s|%s|%s",
                     normalizeText(title),
                     extractKeyWords(content),
-                    sourceName.toLowerCase()
+                    sourceName
             );
 
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

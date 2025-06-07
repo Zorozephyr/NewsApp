@@ -4,6 +4,7 @@ import com.project.ai_summarization_service.dto.NewsEvent;
 import com.project.ai_summarization_service.entity.Article;
 import com.project.ai_summarization_service.repository.ArticleRepository;
 import com.project.ai_summarization_service.service.ArticleProcessingService;
+import com.project.ai_summarization_service.service.NewsProcessingService;
 import com.project.ai_summarization_service.service.gpt.GPTProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -18,18 +19,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class NewsConsumerService {
 
-    private ArticleProcessingService articleProcessingService;
-    private GPTProcessor gptProcessor;
+    private NewsProcessingService newsProcessingService;
 
-    private ArticleRepository articleRepository;
-
-    public NewsConsumerService(ArticleProcessingService articleProcessingService, GPTProcessor gptProcessor, ArticleRepository articleRepository) {
-        this.articleProcessingService = articleProcessingService;
-        this.gptProcessor = gptProcessor;
-        this.articleRepository = articleRepository;
-    }
 
     @Autowired
+    public NewsConsumerService(NewsProcessingService newsProcessingService) {
+        this.newsProcessingService = newsProcessingService;
+    }
 
 
     @KafkaListener(topics = "news.fetched", groupId = "news-group")
@@ -59,7 +55,7 @@ public class NewsConsumerService {
             log.info("NewsEvent URL: {}", newsEvent.getUrl());
 
             // Process the news event
-            processNewsEvent(newsEvent);
+            newsProcessingService.processNewsEvent(newsEvent);
 
             log.info("✅ Message processing completed successfully");
 
@@ -72,25 +68,5 @@ public class NewsConsumerService {
         log.info("=== END KAFKA MESSAGE ===\n");
     }
 
-    private void processNewsEvent(NewsEvent newsEvent) {
-        log.info("🔄 Processing news event with ID: {}", newsEvent.getId());
 
-        //Initial mapping
-        Article newArticle = Article.builder()
-                        .author(newsEvent.getAuthor())
-                        .originalContent(newsEvent.getContent())
-                        .originalDescription(newsEvent.getDescription())
-                        .originalNewsId(newsEvent.getId())
-                        .publishedAt(newsEvent.getPublishedAt())
-                        .sourceName(newsEvent.getSourceName())
-                        .sourceUrl(newsEvent.getUrl())
-                        .title(newsEvent.getTitle())
-                        .build();
-
-
-
-
-
-        log.info("✅ Business logic processing completed for news ID: {}", newsEvent.getId());
-    }
 }

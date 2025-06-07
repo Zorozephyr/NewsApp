@@ -44,6 +44,6 @@ logging:
 
 gemini:
   api:
-    key:
+    key: AIzaSyD2b5GtBCI0RlNXA0o7J9ukXBRWpnw3g_8
     url:
-    model:
+    model: gemini-2.0-flash

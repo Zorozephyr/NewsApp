@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collation = "articles")
+@Document(collection = "articles")
 public class Article {
 
     public enum ProcessingStatus{

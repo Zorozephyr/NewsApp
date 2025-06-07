@@ -2,9 +2,12 @@ package com.project.ai_summarization_service.service.gpt;
 
 import com.google.genai.Client;
 import com.google.genai.types.GenerateContentResponse;
+import jakarta.annotation.PostConstruct;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
+@NoArgsConstructor
 public class GeminiModel implements GptModel{
 
     @Value("${gemini.api.key}")
@@ -21,10 +25,16 @@ public class GeminiModel implements GptModel{
     private String geminiApiUrl;
     @Value("${gemini.api.model}")
     private String geminiApiModel;
-    private final Client geminiClient;
+    private Client geminiClient;
 
-    public GeminiModel(){
+
+    @PostConstruct
+    public void initializeClient() {
+        if (!StringUtils.hasText(geminiApiKey)) {
+            throw new IllegalStateException("Gemini API key is not configured");
+        }
         this.geminiClient = Client.builder().apiKey(geminiApiKey).build();
+        log.info("Gemini client initialized successfully with model: {}", geminiApiModel);
     }
 
     @Override
