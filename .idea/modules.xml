@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/NewsApp.iml" filepath="$PROJECT_DIR$/.idea/NewsApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/ai-summarization-service/ai-summarization-service.iml" filepath="$PROJECT_DIR$/ai-summarization-service/ai-summarization-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/newsprocessor/newsprocessor.iml" filepath="$PROJECT_DIR$/newsprocessor/newsprocessor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user-feed-personalization/user-feed-personalization.iml" filepath="$PROJECT_DIR$/user-feed-personalization/user-feed-personalization.iml" />
     </modules>
   </component>
 </project>

@@ -5,6 +5,7 @@
       <list>
         <option value="$PROJECT_DIR$/newsprocessor/pom.xml" />
         <option value="$PROJECT_DIR$/ai-summarization-service/pom.xml" />
+        <option value="$PROJECT_DIR$/user-feed-personalization/pom.xml" />
       </list>
     </option>
   </component>
